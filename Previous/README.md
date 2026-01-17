@@ -99,10 +99,10 @@ which required authentication.
 * We navigate the directories to see what is interesting and what stands out
 * On the examples directory we note that there is a download example link: this is *interesting*
 * We need to use Burp to determine what is going on with the download
-![nmap scan](./img/docs.png)
+![nmap scan](./img/download.png)
 * The request looks like the above request and we are downloading a file hello-world.ts
 * This is an endpoint we can test for path traversals.
-* We looked at file traversals and did some examples from Portswigger and now we can apply the knowledge here.
+* We looked at path traversals and did some examples from Portswigger and now we can apply the knowledge here.
 * Using the knowledge of path travesals we obtain the following
 ![nmap scan](./img/pathtravel.png)
 * From the file we have retrived we note that node has access to bin/bash which is interesting to us.
@@ -122,3 +122,36 @@ Which are in environ file of the process.
 * Read more on this on the [medium article](https://medium.com/@zoningxtr/from-lfi-to-rce-via-proc-self-environ-shell-access-via-headers-1f22e18c65db)
 * With this knowledge we can read the environment varibles of node and they are
 ![nmap scan](./img/node.png)
+* From the information obtained we have a new working directory /app
+* This looks like a good vector to pursue. Since it is a node directory we
+can research on important files in this directory to read. From the [article](https://medium.com/@jayjethava101/node-js-project-structure-best-practices-and-example-for-clean-code-3e1f5530fd3b) we note that the package.json is a folder in the root directory in this case the app directory.
+* We can try reading it to see what we can gather from it.
+![nmap scan](./img/node.png)
+* This confirms that the app directory is our root directory and also we note a couple of installed dependencies. The next and next-auth standout and we can research 
+for their file structure.
+* To understand the file structure we need to emurate the environment locally and observe it for any interesting and standing out
+information. Following a simple nextjs example we create an app as follows
+![nmap scan](./img/example.png)
+* Since we know they have installed some dependencies we are going to imitate the same and install them ourselves.
+* From the research we note that there is a .next folder created once we run build.
+This folder has an interesting file routes-manifest.json which contains a map of the app router routes
+* Reading the file using the path traversal vulnerability we obtain 
+![nmap scan](./img/route.png)
+* We obtain a number of routes but an interesting one is the /api/auth/.. path. From our research we know that this is going to be in the .next/server/pages/ directory. This endpoint handles authentication and may contain sensitive data.
+* We read the file .next/server/pages/api/auth/...nextauth.js to see if we can obtain useful information.
+* We obtain the following:
+![nmap scan](./img/authapi.png)
+* From this file we obtain a username: jeremy and a password:MyNameIsJeremyAndILovePancakes.
+* We can use this credentials to try and ssh into the machine. 
+* Boom! We have a foothold
+![nmap scan](./img/foothold.png)
+* With the foothold we can read the user flag and submit it.
+* In the shell we can run *sudo -l* to determine the kinds of commands jeremy can run as root
+this is important for root priviledge escalation.
+![nmap scan](./img/sudol.png)
+* From this we now jeremy can run terraform. terraform is a tool to manage cloud and on-premises resources
+We also note that it changes directory to /opt/examples and we can head there to see whats in the directory.
+![nmap scan](./img/terraform.png)
+* It contains two files and what stands out is the main.tf
+
+At this point it is a matter of figuring out how terraform can be exploited to gain root priveldges.
