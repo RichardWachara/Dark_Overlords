@@ -3,7 +3,7 @@ To study our approach we are going to start with a retire
 box previous. This will help in acquiring a basic understanding
 of what tools are used and how we approach a target. With this knowledge we will be ready to try out our first box on our own.
 
-Currently the box is available on the IP address 10.129.2.235.
+* Currently the box is available on the IP address 10.129.2.235.
 
 ### *Lesson* 
 * What is an IP address?
@@ -11,7 +11,7 @@ Currently the box is available on the IP address 10.129.2.235.
 device on the internet. As you read this your device is connected to the internet so it has an IP address.
 You can confirm your IP address by running the command *ifconfig* on Linux or *ipconfig* on Windows. Depending on the type of network you are using the IP address of your computer will show up. 
 
-To see if we can reach the machine across the internet we use the ping command as *ping 10.129.2.235*. The ping command uses the ICMP (Internet Control Protocol) to send a ICMP Echo Request packet to the specified destination. If the machine is online and reachable it responds with an
+     - To see if we can reach the machine across the internet we use the ping command as *ping 10.129.2.235*. The ping command uses the ICMP (Internet Control Protocol) to send a ICMP Echo Request packet to the specified destination. If the machine is online and reachable it responds with an
 ICMP Echo Reply message
 
 * What is ICMP
@@ -19,6 +19,7 @@ ICMP Echo Reply message
 feedback (ICMP Echo Reply message) about packet delivery failure. It is also used by the command *tracroute 10.129.2.235* to trace the path a packet takes before reaching its destination
 
 ![ping image](./img/Ping.png)
+
 Using the above information we can now understand what our ping command output is saying.
 With our target up and reachable we need to perform some orientation
 
@@ -29,3 +30,5 @@ With our target up and reachable we need to perform some orientation
         - Is it internal?
         - Is authentication involved?
 * We are not looking for vulnerabilities at this point. We are building a mental map.
+* For orientation we are going to use nmap to determine what ports are open. 
+
