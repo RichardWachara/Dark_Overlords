@@ -18,9 +18,9 @@ ICMP Echo Reply message
      - It is a network layer protocol of the OSI model used to report errors and diagnose network issues. It allows network devices to send
 feedback (ICMP Echo Reply message) about packet delivery failure. It is also used by the command *tracroute 10.129.2.235* to trace the path a packet takes before reaching its destination
 
-![ping image](./img/Ping.png)
+     - ![ping image](./img/Ping.png)
 
-Using the above information we can now understand what our ping command output is saying.
+     - Using the above information we can now understand what our ping command output is saying.
 With our target up and reachable we need to perform some orientation
 
 ### *Orientation*
