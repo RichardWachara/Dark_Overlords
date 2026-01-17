@@ -59,10 +59,66 @@ To do this we still use nmap to scan. Using the command *nmap -p22,80 -sC -sV 10
 meaning an api with an auth endpoint **interesting**
 * Since it is a website we need to know what technologies are in use.
 This can be done using a web add-on such as *Wappalyzer*
-
+* Using wappalyzer we see that the webserver in use is Next.js and 
+the frontend uses Next.js and React.
+* We also note that from the responses of the webserver the underlying OS is Linux
 
 ### *Hypothesis Testing*
 * Here we need to build a hypothesis to test and adjust it depending 
 on the output or response we get.
+* During our hypothesis testing we will use the previously gathered information to generate a list 
+hypothesis to test.
+* Keeping in mind that the web server is Next.js and there is a auth endpoint we can do a google search to determine
+the kind of vulnerabilities affecting the two combined.
+![nmap scan](./img/Vuln.png)
+* Immediately we see that Next js authentication can be bypassed
+a vulnerability identified as CVE-2025-29927
+* It allows unauthorized access by manipulation of a specific HTTP header
+* In this vulnerability an attacker can bypass the authentication checks
+implemented in the middleware.
+* It involves setting a HTTP header *x-middleware-subrequest* to an
+attackers request. 
+* The header was intended for internal framework use to prevent infinite
+loops but by an attacker adding it manually it tricks the framework 
+into thinking that the request is already validated.
+* Your can learn how the vulnerability works in projectdiscovery documentation.
+* In the documentation we see there are a couple of payloads each for a different version
+of Next.js.
+* We need to determine which of the following next.js version our target is using.
+* Here I use the match and replace tool in BurpSuite to add all the existing payloads
+to my request headers since I dont know what service our target is running.
+![nmap scan](./img/payload.png)
+* With this configured our requests are being intercepted and the payloads being added to look as follows
+![nmap scan](./img/Exploit.png)
+* With this we need to go back and try navigating the website from the start
+* And there we have it, one of the payload worked and we navigated to the docs directory
+which required authentication.
+![nmap scan](./img/docs.png)
 
-
+* After access we need to redo a lightweight recon on the  new access directory.
+* We navigate the directories to see what is interesting and what stands out
+* On the examples directory we note that there is a download example link: this is *interesting*
+* We need to use Burp to determine what is going on with the download
+![nmap scan](./img/docs.png)
+* The request looks like the above request and we are downloading a file hello-world.ts
+* This is an endpoint we can test for path traversals.
+* We looked at file traversals and did some examples from Portswigger and now we can apply the knowledge here.
+* Using the knowledge of path travesals we obtain the following
+![nmap scan](./img/pathtravel.png)
+* From the file we have retrived we note that node has access to bin/bash which is interesting to us.
+* However node is a process and not a username, it makes sense since the application is running on NextJS and probably
+it is using node for this purpose.
+* With this we can build a hypothesis that the node process is important
+and we need to use the path traversal vulnerability to read an important file.
+* With some googling we find that the /proc directory is important to process in Linux machines.
+* On further research we now know the /proc directory has 2 main types
+of entries: numbered subdirectories and systemwide information file.
+We also know that it contains information about running process and system hardware.
+* We note an interesting subdirectory self which points to the directory of the process accessing it.
+* It is important to note that the current process accessing the 
+proc directory is the node process through NextJS
+* With this we can try to read the environment variables of the node process.
+Which are in environ file of the process.
+* Read more on this on the [medium article](https://medium.com/@zoningxtr/from-lfi-to-rce-via-proc-self-environ-shell-access-via-headers-1f22e18c65db)
+* With this knowledge we can read the environment varibles of node and they are
+![nmap scan](./img/node.png)
