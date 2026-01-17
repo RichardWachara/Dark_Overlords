@@ -32,13 +32,15 @@ With our target up and reachable we need to perform some orientation
 * We are not looking for vulnerabilities at this point. We are building a mental map.
 * For orientation we are going to use nmap to determine what ports are open. 
      #### Lesson
-      * What is a port and why is it important?
+     * What is a port and why is it important?
+
          - It is a virtual endpoint on a device that directs traffic to the correct application.
  It is identified by a number between 0 and 65535
+
          - Ports are important because the allow a single IP address to host multiple services.
 
          * To determine the open port we use the following command *nmap -p- 10.129.2.235 -T5*
-         ![nmap scan](./img/Nmapscan.png)
+         * ![nmap scan](./img/Nmapscan.png)
          - From the results we see that 2 ports are open and each port is running a service:
  Port 22 is running ssh and Port 80 is running http.
          - We know http is used on the internet and ssh is used to access a machine remotely.
