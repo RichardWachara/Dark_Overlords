@@ -55,7 +55,14 @@ To do this we still use nmap to scan. Using the command *nmap -p22,80 -sC -sV 10
 * To effectively navigate to the website we add the IP address to our /etc/host file so that we dont have to remember the IP address each time we visit the website.
 * Once it is added we can navigate to the website with the http://previous.htb link.
 ![nmap scan](./img/Website.png)
-* Looking at the website landing page there is nothing that interesting other than the 2 buttons that redirect us to a login page. We note the URL we are being redirected to as http://previous.htb/api/auth/signin?callbackUrl=%2Fdocs
+* Looking at the website landing page there is nothing that interesting other than the 2 buttons that redirect us to a login page. We note the URL we are being redirected to as /api/auth/signin?callbackUrl=%2Fdocs 
+meaning an api with an auth endpoint **interesting**
+* Since it is a website we need to know what technologies are in use.
+This can be done using a web add-on such as *Wappalyzer*
 
+
+### *Hypothesis Testing*
+* Here we need to build a hypothesis to test and adjust it depending 
+on the output or response we get.
 
 
