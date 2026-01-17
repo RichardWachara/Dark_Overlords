@@ -31,4 +31,5 @@ With our target up and reachable we need to perform some orientation
         - Is authentication involved?
 * We are not looking for vulnerabilities at this point. We are building a mental map.
 * For orientation we are going to use nmap to determine what ports are open. 
+     #### Lesson
 
