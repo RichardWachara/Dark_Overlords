@@ -5,7 +5,7 @@ of what tools are used and how we approach a target. With this knowledge we will
 
 Currently the box is available on the IP address 10.129.2.235.
 
-*### Lesson *
+### *Lesson* 
 * What is an IP address?
      - An IP address is a unique identification number assigned to every 
 device on the internet. As you read this your device is connected to the internet so it has an IP address.
@@ -16,4 +16,16 @@ ICMP Echo Reply message
 
 * What is ICMP
      - It is a network layer protocol of the OSI model used to report errors and diagnose network issues. It allows network devices to send
-feedback (ICMP Echo Reply message) about packet delivery failure.
+feedback (ICMP Echo Reply message) about packet delivery failure. It is also used by the command *tracroute 10.129.2.235* to trace the path a packet takes before reaching its destination
+
+![ping image](./img/Ping.png)
+Using the above information we can now understand what our ping command output is saying.
+With our target up and reachable we need to perform some orientation
+
+### *Orientation*
+* The goal here is not deep scanning it is to understand what king of system we are targeting.
+     - The main questions to answer include:
+        - Is it web-facing?
+        - Is it internal?
+        - Is authentication involved?
+* We are not looking for vulnerabilities at this point. We are building a mental map.
